@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="#">
+    <link rel="stylesheet" href="css/front-page.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Leckerli+One&display=swap" rel="stylesheet">
+    <title>CuPO</title>
+</head>
+<body>
+<div class="main-container">
+
+    <div class="header-container">
+        <h1 class="leckerli-one-regular">Culinary Preferences Organizer</h1>
+
+        <div class="buttons-container">
+            <button id="login-button">Log in</button>
+            <button id="register-button">Sign up</button>
+        </div>
+    </div>
+    <div class="body-container">
+
+        <div class="image-registration-container">
+            <div class="image-container">
+                <img src="assets/pictures/cover.png" alt="image">
+            </div>
+            <div class="registration-container">
+
+                <form id="login-form">
+                    <div class="input-container">
+                        <input type="text" id="username-login" placeholder="Username">
+                    </div>
+                    <div class="input-container">
+                        <input id="password-login" type="password" placeholder="Password">
+                        <span onclick="togglePassword('login', 'password')" class="eye-icon">👁️</span>
+                    </div>
+                    <button id="login-submit" type="submit">Log in</button>
+                </form>
+
+                <div id="register-form">
+                    <div class="input-container">
+                        <input id="username-register" type="text" placeholder="Username" required>
+                    </div>
+                    <div class="input-container">
+                        <input id="email-register" type="email" placeholder="Email" required>
+                    </div>
+                    <div class="input-container">
+                        <input id="password-register" type="password" placeholder="Password" required>
+                        <span onclick="togglePassword('register', 'password')" class="eye-icon">👁️</span>
+                    </div>
+                    <div class="input-container">
+                        <input id="confirm-password-register" type="password" placeholder="Confirm Password" required>
+                        <span onclick="togglePassword('register', 'confirm-password')" class="eye-icon">👁️</span>
+                    </div>
+                    <button id="register-submit" type="submit">Sign up</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script src="js/display/front-page.js"></script>
+</body>
+</html>
