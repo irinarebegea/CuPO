@@ -29,7 +29,8 @@ class CategoriesModel {
         return null;
     }
 
-    function insertCategory($name) {
+    function insertCategory($name): bool
+    {
         try {
             $insertCategory = $this->db->prepare("INSERT INTO categories (name) VALUES (:name)");
             $insertCategory->execute(["name"=>$name]);
@@ -40,7 +41,8 @@ class CategoriesModel {
         return false;
     }
 
-    function updateCategory($id, $name) {
+    function updateCategory($id, $name): bool
+    {
         try {
             $updateCategory = $this->db->prepare("UPDATE categories SET name = :name WHERE id = :id");
             $updateCategory->execute(["name"=>$name, "id"=>$id]);
@@ -51,7 +53,8 @@ class CategoriesModel {
         return false;
     }
 
-    function deleteCategory($id) {
+    function deleteCategory($id): bool
+    {
         try {
             $deleteCategory = $this->db->prepare("DELETE FROM categories WHERE id = :id");
             $deleteCategory->execute(["id"=>$id]);

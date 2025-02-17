@@ -29,7 +29,7 @@
             </div>
             <div class="registration-container">
 
-                <form id="login-form">
+                <form id="login-form" method="post">
                     <div class="input-container">
                         <input type="text" id="username-login" placeholder="Username">
                     </div>
@@ -40,28 +40,29 @@
                     <button id="login-submit" type="submit">Log in</button>
                 </form>
 
-                <div id="register-form">
+                <form id="register-form" method="post">
                     <div class="input-container">
-                        <input id="username-register" type="text" placeholder="Username" required>
+                        <input id="username-register" type="text" placeholder="Username" name="username" required>
                     </div>
                     <div class="input-container">
-                        <input id="email-register" type="email" placeholder="Email" required>
+                        <input id="email-register" type="email" placeholder="Email" name="email" required>
                     </div>
                     <div class="input-container">
-                        <input id="password-register" type="password" placeholder="Password" required>
+                        <input id="password-register" type="password" placeholder="Password" name="password" required>
                         <span onclick="togglePassword('register', 'password')" class="eye-icon">👁️</span>
                     </div>
                     <div class="input-container">
-                        <input id="confirm-password-register" type="password" placeholder="Confirm Password" required>
+                        <input id="confirm-password-register" type="password" placeholder="Confirm Password" name="confirm-password" required>
                         <span onclick="togglePassword('register', 'confirm-password')" class="eye-icon">👁️</span>
                     </div>
                     <button id="register-submit" type="submit">Sign up</button>
-                </div>
+                </form>
 
             </div>
         </div>
     </div>
 </div>
 <script src="js/display/front-page.js"></script>
+<script type="module" src="js/app.js"></script>
 </body>
 </html>

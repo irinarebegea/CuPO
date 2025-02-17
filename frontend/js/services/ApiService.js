@@ -15,14 +15,20 @@ class ApiService {
         return this.fetch(url);
     }
 
-    post(url, data) {
-        return this.fetch(url, {
+    post(url, data, includeCredentials = false) {
+        const fetchOptions = {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(data)
-        });
+        };
+
+        if (includeCredentials) {
+            fetchOptions.credentials = 'include';
+        }
+
+        return this.fetch(url, fetchOptions);
     }
 
     put(url, data) {

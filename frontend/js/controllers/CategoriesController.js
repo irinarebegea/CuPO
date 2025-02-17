@@ -7,6 +7,7 @@ class CategoriesController {
     }
 
     loadCategories() {
+        console.log('called load categories');
         this.categoriesService.getAllCategories().then(categories => {
             this.renderCategories(categories);
         }).catch(error => {
