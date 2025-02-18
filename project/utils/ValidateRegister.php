@@ -1,26 +1,26 @@
 <?php
 
 declare(strict_types=1);
-
 require_once 'Models/AuthModel.php';
-
-class Validate {
+class ValidateRegister {
     private $username;
     private $email;
     private $password;
     private $confirmPassword;
+
     private $model;
 
-    function __construct(string $username, string $email, string $password, string $confirmPassword) {
-        $this->username = $username;
-        $this->email = $email;
-        $this->password = $password;
-        $this->confirmPassword = $confirmPassword;
+    function __construct($data, AuthModel $model) {
+        $this->username = $data['username'] ?? null;
+        $this->email = $data['email'] ?? null;
+        $this->password = $data['password'] ?? null;
+        $this->confirmPassword = $data['confirm-password'] ?? null;
 
-        $this->model = new AuthModel();
+        $this->model = $model;
     }
 
-    function validateData() {
+
+    function validateData(): bool {
         $errors = [];
         if (empty($this->username) || empty($this->email) || empty($this->password) || empty($this->confirmPassword)) {
             $errors["incomplete_form"] = "Please fill all the fields";
@@ -47,7 +47,7 @@ class Validate {
         }
 
         if (!empty($errors)) {
-            $_SESSION["register_errors"] = $errors;
+            $_SESSION["errors"] = $errors;
             return false;
         }
 

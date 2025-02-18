@@ -6,7 +6,8 @@ class ApiService {
     async fetch(url, options = {}) {
         const response = await fetch(`${this.baseURL}${url}`, options);
         if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+            const errorData = await response.json();
+            throw {status: response.status, ...errorData}
         }
         return response.json();
     }

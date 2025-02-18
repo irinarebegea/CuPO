@@ -1,38 +1,67 @@
 <?php
 
 require_once 'Models/AuthModel.php';
-require_once 'Utils/Validate.php';
+require_once 'Utils/ValidateRegister.php';
+require_once 'Utils/ValidateLogin.php';
 
 class AuthController {
-    private $model;
+    public $model;
     public function __construct() {
         $this->model = new AuthModel();
     }
 
-    public function create() {
-        header('Content-Type: application/json');
-        $rawData = file_get_contents('php://input');
-        #TODO get input another way
-        $data = json_decode($rawData, true);
-
-        $validator = new Validate($data['username'], $data['email'], $data['password'], $data['confirm-password']);
+    private function handleValidate($data, $validatorType): bool {
+        /**
+         * Handles input parsing and validation for login and register.
+         * @param  array $data User input
+         * @param class $validatorType Validator for either login or register
+         * @return bool True if input is valid, false otherwise
+         */
+        $validator = new $validatorType($data, $this->model);
 
         if (!$validator->validateData()) {
-            echo json_encode(['error' => 'Validation failed', 'details' => $_SESSION['register_errors']]);
             http_response_code(400);
-            error_log(implode(',', $_SESSION["register_errors"]));
+            echo json_encode(['error' => 'Validation failed', 'details' => $_SESSION['errors']]);
+            error_log(implode(',', $_SESSION["errors"]));
+            return false;
+        }
+        return true;
+    }
+
+    private function sendResponse($success, $message, $httpCode, $successMessage = null) {
+        if ($success) {
+            echo json_encode(['success' => $successMessage ?? $message]);
+        } else {
+            echo json_encode(['error' => $message]);
+        }
+        http_response_code($httpCode);
+    }
+
+
+    public function login() {
+        header('Content-type: application/json');
+        $data = json_decode(file_get_contents('php://input'), true);
+
+        if (!$this->handleValidate($data, ValidateLogin::class)) {
+            return;
+        }
+
+        $result = $this->model->login($data['username'], $data['password']);
+        $this->sendResponse($result, 'Failed to log in user', $result ? 201 : 500, 'User logged in successfully');
+    }
+
+    public function register() {
+        header('Content-Type: application/json');
+        $data = json_decode(file_get_contents('php://input'), true);
+        error_log(implode(',', $data));
+
+        if (!$this->handleValidate($data, ValidateRegister::class)) {
             return;
         }
 
         $result = $this->model->registerUser($data['username'], $data['email'], $data['password']);
-
-        if ($result) {
-            echo json_encode(['success' => 'User registered successfully']);
-            http_response_code(201);
-        } else {
-            echo json_encode(['error' => 'Failed to register user']);
-            http_response_code(500);
-        }
+        $this->sendResponse($result, 'Failed to register user', $result ? 201 : 500, 'User registered successfully');
     }
+
 
 }

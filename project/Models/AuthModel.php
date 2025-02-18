@@ -11,6 +11,22 @@ class AuthModel
         $this->db = Database::getInstance();
     }
 
+    function login($username, $password): bool {
+        $encrypted_password = password_hash($password, PASSWORD_DEFAULT);
+        try {
+            $getUser = $this->db->prepare("SELECT * FROM users WHERE username = :username and pwd = :password");
+            $getUser->execute(['username' => $username, 'pwd' => $encrypted_password]);
+            if ($getUser->rowCount() != 1) {
+                throw new Exception("Username or password is incorrect");
+            }
+
+            return $getUser->rowCount() > 0;
+        } catch (\Exception $e) {
+            error_log("Error in login:" . $e->getMessage());
+            return false;
+        }
+    }
+
     function registerUser($username, $email, $pwd, $role = 0): bool
     {
         $pwd = password_hash($pwd, PASSWORD_DEFAULT);

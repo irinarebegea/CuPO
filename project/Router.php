@@ -8,10 +8,27 @@ class Router {
     private $method;
     private $id;
     private $endpoint;
+    private $routes = [];
 
     public function __construct() {
         $this->parseUri();
         $this->setHeaders();
+        $this->defineRoutes();
+    }
+
+    private function defineRoutes() {
+        $this->routes = [
+            'categories' => [
+                'GET'    => [CategoriesController::class, 'getAll'],
+                'POST'   => [CategoriesController::class, 'create'],
+            ],
+            'users/login' => [
+                'POST'  => [AuthController::class, 'login'],
+            ],
+            'users/register' => [
+                'POST'  => [AuthController::class, 'register'],
+            ]
+        ];
     }
 
     public function setHeaders() {
@@ -20,7 +37,7 @@ class Router {
         header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
 
         $allowedOrigins = ['http://127.0.0.1:3000', 'http://localhost:3000'];
-        $origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : '';
+        $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 
         if (in_array($origin, $allowedOrigins)) {
             header('Access-Control-Allow-Origin: ' . $origin);
@@ -37,52 +54,42 @@ class Router {
     }
 
     public function parseUri() {
-        $uri = trim($_SERVER['REQUEST_URI'], '/');
+        $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        $uri = trim($uri, '/');
         $uriParts = explode('/', $uri);
 
-        $this->endpoint = $uriParts[0] ? $uriParts[0] : null;
-        $this->id = $uriParts[1] ? $uriParts[1] : null;
-        $this->method = $_SERVER['REQUEST_METHOD'];
+        if (isset($uriParts[1])) {
+            $this->endpoint = $uriParts[0] . '/' . $uriParts[1];
+            $this->id = $uriParts[2] ?? null;
+        } else {
+            $this->endpoint = $uriParts[0];
+            $this->id = null;
+        }
 
+        $this->method = $_SERVER['REQUEST_METHOD'];
     }
+
 
     public function route() {
-        switch ($this->endpoint) {
-            case 'categories':
-                $this->controller = new CategoriesController();
-                break;
-            case 'users':
-                $this->controller = new AuthController();
-                break;
-            default:
-                header('HTTP/1.1 404 Not Found');
-                echo json_encode(['error' => 'Endpoint Not Found']);
-                return;
+        if (!isset($this->routes[$this->endpoint][$this->method])) {
+            error_log($this->endpoint);
+            error_log($this->method);
+            header('HTTP/1.1 404 Not Found');
+            echo json_encode(['error' => 'Endpoint or Method Not Supported']);
+            return;
         }
 
-        switch ($this->method) {
-            case 'GET':
-                if ($this->id) {
-                    $this->controller->get($this->id);
-                } else {
-                    $this->controller->getAll();
-                }
-                break;
-            case 'POST':
-                $this->controller->create();
-                break;
-            case 'PUT':
-                $this->controller->update($this->id);
-                break;
-            case 'DELETE':
-                $this->controller->delete($this->id);
-                break;
-            default:
-                header('HTTP/1.1 405 Method Not Allowed');
-                echo json_encode(['error' => 'Method Not Allowed']);
-                break;
+        [$controllerName, $method] = $this->routes[$this->endpoint][$this->method];
+        if (!class_exists($controllerName)) {
+            header('HTTP/1.1 500 Internal Server Error');
+            echo json_encode(['error' => 'Server configuration error']);
+            return;
         }
+
+        $this->controller = new $controllerName();
+        $this->controller->$method();
     }
+
 
 }
 
