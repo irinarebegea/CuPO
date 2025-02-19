@@ -72,8 +72,6 @@ class Router {
 
     public function route() {
         if (!isset($this->routes[$this->endpoint][$this->method])) {
-            error_log($this->endpoint);
-            error_log($this->method);
             header('HTTP/1.1 404 Not Found');
             echo json_encode(['error' => 'Endpoint or Method Not Supported']);
             return;

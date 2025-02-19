@@ -22,17 +22,17 @@ class AuthController {
         if (!$validator->validateData()) {
             http_response_code(400);
             echo json_encode(['error' => 'Validation failed', 'details' => $_SESSION['errors']]);
-            error_log(implode(',', $_SESSION["errors"]));
             return false;
         }
         return true;
     }
 
-    private function sendResponse($success, $message, $httpCode, $successMessage = null) {
+    private function sendResponse($success, $errorMessage, $httpCode, $successMessage = null) {
         if ($success) {
-            echo json_encode(['success' => $successMessage ?? $message]);
+            echo json_encode(['success' => $successMessage ?? $errorMessage]);
+            unset($_SESSION['errors']);
         } else {
-            echo json_encode(['error' => $message]);
+            echo json_encode(['error' => $errorMessage]);
         }
         http_response_code($httpCode);
     }
@@ -53,7 +53,6 @@ class AuthController {
     public function register() {
         header('Content-Type: application/json');
         $data = json_decode(file_get_contents('php://input'), true);
-        error_log(implode(',', $data));
 
         if (!$this->handleValidate($data, ValidateRegister::class)) {
             return;
@@ -62,6 +61,4 @@ class AuthController {
         $result = $this->model->registerUser($data['username'], $data['email'], $data['password']);
         $this->sendResponse($result, 'Failed to register user', $result ? 201 : 500, 'User registered successfully');
     }
-
-
 }

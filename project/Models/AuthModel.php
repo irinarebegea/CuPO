@@ -12,15 +12,20 @@ class AuthModel
     }
 
     function login($username, $password): bool {
-        $encrypted_password = password_hash($password, PASSWORD_DEFAULT);
         try {
-            $getUser = $this->db->prepare("SELECT * FROM users WHERE username = :username and pwd = :password");
-            $getUser->execute(['username' => $username, 'pwd' => $encrypted_password]);
-            if ($getUser->rowCount() != 1) {
-                throw new Exception("Username or password is incorrect");
+            $getUser = $this->db->prepare("SELECT * FROM users WHERE username = :username");
+            $getUser->execute(['username' => $username]);
+            $user = $getUser->fetch(PDO::FETCH_ASSOC);
+
+            if ($user === false) {
+                throw new Exception("Username does not exist");
             }
 
-            return $getUser->rowCount() > 0;
+            if (!password_verify($password, $user['pwd'])) {
+                throw new Exception("Password is incorrect");
+            }
+            return true;
+
         } catch (\Exception $e) {
             error_log("Error in login:" . $e->getMessage());
             return false;

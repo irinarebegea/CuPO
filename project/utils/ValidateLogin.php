@@ -27,7 +27,7 @@ class ValidateLogin {
             $errors["invalid_username"] = "Invalid username";
         }
 
-        if ($user && !password_verify($this->password, $user->password)) {
+        if ($user && !password_verify($this->password, $user['pwd'])) {
             $errors["invalid_password"] = "Invalid password";
         }
 

@@ -6,28 +6,43 @@ class AuthController {
     }
 
     init() {
-        this.registerEventListeners();
+        this.addFormEventListeners();
     }
 
-    registerEventListeners() {
-        const form = document.getElementById('register-form');
+    addFormEventListeners() {
+        this.setupFormListener('register-form', (form) => this.handleUserForm(form, 'register'));
+        this.setupFormListener('login-form', (form) => this.handleUserForm(form, 'login'));
+    }
+
+    setupFormListener(formID, callback) {
+        const form = document.getElementById(formID);
         if (form) {
             form.addEventListener('submit', (e) => {
-                e.preventDefault();
-                this.registerUser(form);
-            })
+               e.preventDefault();
+               callback(form);
+            });
         }
     }
 
-    registerUser(registerForm) {
-        const formData = new FormData(registerForm);
+    handleUserForm(form, action) {
+        const formData = new FormData(form);
+        let actionPromise;
 
-        this.authService.registerUser(formData).then(response => {
-            console.log('response:', response);
-            window.location.href = '/views/index.html';
-        }).catch(error => {
-            this.displayErrors(error.details);
-        });
+        if (action === 'login') {
+            actionPromise = this.authService.loginUser(formData);
+        } else if (action === 'register') {
+            actionPromise = this.authService.registerUser(formData);
+        }
+
+        if (actionPromise) {
+            actionPromise.then(response => {
+                console.log('response:', response);
+                window.location.href = '/views/index.html';
+            }).catch(error => {
+                console.log('Error:', error);
+                this.displayErrors(error.details);
+            })
+        }
     }
 
     displayErrors(messages) {
