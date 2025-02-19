@@ -5,12 +5,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const path = window.location.pathname;
     console.log('found path', path);
 
-    if (path.includes('/index.html')) {
+    if (path.includes('/dashboard.html')) {
         const categoriesController = new CategoriesController();
         categoriesController.loadCategories();
     }
 
-    if (path.includes('/front-page.html')) {
+    if (path === '/') {
         const authController = new AuthController();
         authController.init();
     }

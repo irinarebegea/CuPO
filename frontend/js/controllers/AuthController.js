@@ -37,7 +37,8 @@ class AuthController {
         if (actionPromise) {
             actionPromise.then(response => {
                 console.log('response:', response);
-                window.location.href = '/views/index.html';
+                // TODO change routing method
+                window.location.href = '/views/dashboard.html';
             }).catch(error => {
                 console.log('Error:', error);
                 this.displayErrors(error.details);
