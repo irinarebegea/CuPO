@@ -1,6 +1,7 @@
 <?php
 
 require_once 'Controllers/CategoriesController.php';
+require_once 'Controllers/IngredientsController.php';
 require_once 'Controllers/AuthController.php';
 
 class Router {
@@ -10,17 +11,29 @@ class Router {
     private $endpoint;
     private $routes = [];
 
+    private $params;
+
     public function __construct() {
-        $this->parseUri();
-        $this->setHeaders();
         $this->defineRoutes();
+        $this->setHeaders();
+        $this->parseUri();
+
     }
 
     private function defineRoutes() {
         $this->routes = [
             'categories' => [
                 'GET'    => [CategoriesController::class, 'getAll'],
-                'POST'   => [CategoriesController::class, 'create'],
+//                'POST'   => [CategoriesController::class, 'create'],
+            ],
+            'categories/{id}' => [
+                'GET'    => [CategoriesController::class, 'get'],
+//                'PUT'    => [IngredientsController::class, 'update'],
+//                'DELETE' => [IngredientsController::class, 'delete'],
+            ],
+            'categories/{id}/ingredients' => [
+                'GET'    => [IngredientsController::class, 'getAll'],
+//                'POST'   => [IngredientsController::class, 'create'],
             ],
             'users/login' => [
                 'POST'  => [AuthController::class, 'login'],
@@ -39,12 +52,15 @@ class Router {
         $allowedOrigins = ['http://127.0.0.1:3000', 'http://localhost:3000'];
         $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 
-        if (in_array($origin, $allowedOrigins)) {
-            header('Access-Control-Allow-Origin: ' . $origin);
-        } else {
-            header('HTTP/1.1 403 Access Forbidden');
-            die('You are not allowed to access this file.');
-        }
+        // commented to work with postman
+//        if (in_array($origin, $allowedOrigins)) {
+//            header('Access-Control-Allow-Origin: ' . $origin);
+//        } else {
+//            header('HTTP/1.1 403 Access Forbidden');
+//            die('You are not allowed to access this file.');
+//        }
+
+        header('Access-Control-Allow-Origin: *');
 
         if($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
             header('HTTP/1.1 204 No Content');
@@ -58,19 +74,40 @@ class Router {
         $uri = trim($uri, '/');
         $uriParts = explode('/', $uri);
 
-        if (isset($uriParts[1])) {
-            $this->endpoint = $uriParts[0] . '/' . $uriParts[1];
-            $this->id = $uriParts[2] ?? null;
-        } else {
-            $this->endpoint = $uriParts[0];
-            $this->id = null;
+        foreach ($this->routes as $pattern => $methods) {
+            $patternParts = explode('/', trim($pattern, '/'));
+            if (count($uriParts) != count($patternParts)) {
+                continue;
+            }
+
+            $match = true;
+            $params = [];
+            foreach ($patternParts as $key => $part) {
+                if (preg_match('/^{[^}]+}$/', $part)) {
+                    $params[trim($part, '{}')] = $uriParts[$key];
+                } elseif ($uriParts[$key] != $part) {
+                    $match = false;
+                    break;
+                }
+            }
+
+            if ($match) {
+                $this->endpoint = $pattern;
+                $this->params = $params;
+                break;
+            }
         }
 
         $this->method = $_SERVER['REQUEST_METHOD'];
+        error_log('Matched Endpoint: ' . $this->endpoint);
+        error_log('Params: ' . print_r($this->params, true));
     }
 
 
+
     public function route() {
+        error_log(print_r($this->routes, true));
+
         if (!isset($this->routes[$this->endpoint][$this->method])) {
             header('HTTP/1.1 404 Not Found');
             echo json_encode(['error' => 'Endpoint or Method Not Supported']);
@@ -85,9 +122,12 @@ class Router {
         }
 
         $this->controller = new $controllerName();
-        $this->controller->$method();
+        if (!empty($this->params)) {
+            $this->controller->$method(...array_values($this->params));
+        } else {
+            $this->controller->$method();
+        }
     }
-
 
 }
 

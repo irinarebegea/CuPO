@@ -5,13 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="be1a1917-cde5-4241-8dac-db7c9e8b37c0" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/frontend/css/dashboard.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/css/navigation.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/css/front-page.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/css/index.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/js/display/front-page.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/js/display/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/views/dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/views/dashboard.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/css/dashboard.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/css/dashboard.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/js/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/js/controllers/CategoriesController.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/js/controllers/CategoriesController.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/js/controllers/IngredientsController.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/js/controllers/IngredientsController.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/js/display/dashboard.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/js/display/dashboard.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/js/services/IngredientsService.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/js/services/IngredientsService.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/js/utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/js/utils.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/Controllers/CategoriesController.php" beforeDir="false" afterPath="$PROJECT_DIR$/project/Controllers/CategoriesController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/Controllers/IngredientsController.php" beforeDir="false" afterPath="$PROJECT_DIR$/project/Controllers/IngredientsController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/Models/IngredientsModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/project/Models/IngredientsModel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/Router.php" beforeDir="false" afterPath="$PROJECT_DIR$/project/Router.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/~$CuPO.docx" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -100,7 +106,8 @@
       <workItem from="1739775281101" duration="23628000" />
       <workItem from="1739859487024" duration="15814000" />
       <workItem from="1739946347152" duration="6699000" />
-      <workItem from="1739966809954" duration="4519000" />
+      <workItem from="1739966809954" duration="5061000" />
+      <workItem from="1740032070142" duration="21429000" />
     </task>
     <servers />
   </component>

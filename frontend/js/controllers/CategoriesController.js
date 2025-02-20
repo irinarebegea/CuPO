@@ -1,4 +1,5 @@
 import CategoriesService from '../services/CategoriesService.js';
+import { renderListElements } from "../utils.js";
 
 class CategoriesController {
     constructor() {
@@ -7,21 +8,11 @@ class CategoriesController {
     }
 
     loadCategories() {
-        console.log('called load categories');
         this.categoriesService.getAllCategories().then(categories => {
-            this.renderCategories(categories);
+            renderListElements(this.categoriesList, categories, 'id');
         }).catch(error => {
             console.error('Error fetching categories:', error);
             this.categoriesList.innerHTML = '<li>Error loading categories.</li>';
-        });
-    }
-
-    renderCategories(categories) {
-        this.categoriesList.innerHTML = ''; // Clear existing entries
-        categories.forEach(category => {
-            const listItem = document.createElement('li');
-            listItem.textContent = category.name;
-            this.categoriesList.appendChild(listItem);
         });
     }
 }

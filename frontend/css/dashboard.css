@@ -9,12 +9,23 @@ body {
 
 #categories-container {
     width: 85%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /*justify-content: center;*/
+    align-content: center;
+    border: solid saddlebrown;
 }
 
 #categories-list {
     list-style-type: none;
     padding: 0;
+    /*border: 1px solid #dddddd;*/
+    border-radius: 5px;
+    width: 50%;
 }
 
 #categories-list li {
+    border-bottom: 1px solid #dddddd;
+    padding: 1%;
 }

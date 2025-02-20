@@ -5,6 +5,7 @@ class CategoriesController {
     private $model;
 
     public function __construct() {
+        error_log("Initializing CategoriesController");
         $this->model = new CategoriesModel();
     }
 
